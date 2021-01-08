@@ -17,6 +17,7 @@ https://github.com/MateqB/altv-vehicle-lock-system
 
 -   [NodeJS 13+](https://nodejs.org/en/download/current/)
 -   Einen existierenden Server
+-   discord-webhook-node für die Logs (npm i discord-webhook-node)
 
 Danach musst du in deine `server.cfg` folgenden Name hinzufügen. Es muss der gleiche sein!
 

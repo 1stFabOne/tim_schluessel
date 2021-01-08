@@ -1,5 +1,10 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
+const { Webhook, MessageBuilder } = require('discord-webhook-node');
+const config = require("../config.json");
+const hook = new Webhook(config.webhook);
+const profilbild = config.profilbild;
+const webhookname = config.webhookname;
 
 alt.on('keyup', (key) => {
     if(key == 47) {
@@ -8,10 +13,43 @@ alt.on('keyup', (key) => {
             if(owner) {
                 if(owner.id == alt.Player.local.id) {
                     toggleVehicleLocks(alt.Player.local.vehicle)
-                } else {
+                } else if (config.webhookaktiv = true) {
+                    const embed = new MessageBuilder()
+                        embed.setTitle('Schlüssel System')
+                        embed.setAuthor(config.servername, profilbild)
+                        embed.setURL(config.websiteurl)
+                        embed.setDescription("Kein Schlüssel gefunden")
+                        embed.addField('Spieler', owner, true)
+                        embed.addField('Ingame ID', alt.Player.local.id, true)
+                        embed.setColor('#00b0f4')
+                        embed.setThumbnail(profilbild)
+                        embed.setFooter('Schlüssel System by TutoHacks', 'https://cdn.discordapp.com/avatars/595212497821368330/5f34a4702c5cdbe6418aa70e15eaa125.png?size=128')
+                        embed.setTimestamp();
+                    hook.setUsername(webhookname);
+                    hook.setAvatar(profilbild);
+                    hook.send(embed);
+                    showNotification("", null, "CHAR_CARSITE", 7, "Schlüssel", "Du hast keine Schlüssel gefunden", 1)
+                } else if (config.webhookaktiv = false) {
                     showNotification("", null, "CHAR_CARSITE", 7, "Schlüssel", "Du hast keine Schlüssel gefunden", 1)
                 }
-            } else {
+            } else if (config.webhookaktiv = true) {
+                const embed = new MessageBuilder()
+                    embed.setTitle('Schlüssel System')
+                    embed.setAuthor(config.servername, profilbild)
+                    embed.setURL(config.websiteurl)
+                    embed.setDescription("Schlüssel gefunden")
+                    embed.addField('Spieler', owner, true)
+                    embed.addField('Ingame ID', alt.Player.local.id, true)
+                    embed.setColor('#00b0f4')
+                    embed.setThumbnail(profilbild)
+                    embed.setFooter('Schlüssel System by TutoHacks', 'https://cdn.discordapp.com/avatars/595212497821368330/5f34a4702c5cdbe6418aa70e15eaa125.png?size=128')
+                    embed.setTimestamp();
+                hook.setUsername(webhookname);
+                hook.setAvatar(profilbild);
+                hook.send(embed);
+                alt.emitServer('tim_schluessel:setOwner', alt.Player.local.vehicle)
+                showNotification("", null, "CHAR_CARSITE", 7, "Schlüssel", 'Du hast Schlüssel gefunden', 1)
+            } else if (config.webhookaktiv = false) {
                 alt.emitServer('tim_schluessel:setOwner', alt.Player.local.vehicle)
                 showNotification("", null, "CHAR_CARSITE", 7, "Schlüssel", 'Du hast Schlüssel gefunden', 1)
             }
@@ -35,7 +73,25 @@ function toggleVehicleLocks(veh) {
 }
 
 alt.onServer('tim_schluessel:lockUpdate', (veh, lockstate) => {;
-    showNotification("", null, "CHAR_CARSITE", 7, "Schlüssel", lockstate == 1 ? 'Fahrzeug aufgeschlossen' : 'Fahrzeug abgeschlossen', 1)
+    if (config.webhookaktiv = true) {
+        const embed = new MessageBuilder()
+            embed.setTitle('Schlüssel System')
+            embed.setAuthor(config.servername, profilbild)
+            embed.setURL(config.websiteurl)
+            embed.setDescription(lockstate == 1 ? 'Fahrzeug aufgeschlossen' : 'Fahrzeug abgeschlossen')
+            embed.addField('Spieler', owner, true)
+            embed.addField('Ingame ID', alt.Player.local.id, true)
+            embed.setColor('#00b0f4')
+            embed.setThumbnail(profilbild)
+            embed.setFooter('Schlüssel System by TutoHacks', 'https://cdn.discordapp.com/avatars/595212497821368330/5f34a4702c5cdbe6418aa70e15eaa125.png?size=128')
+            embed.setTimestamp();
+        hook.setUsername(webhookname);
+        hook.setAvatar(profilbild);
+        hook.send(embed);
+    }
+    if (config.webhookaktiv = false) {
+        showNotification("", null, "CHAR_CARSITE", 7, "Schlüssel", lockstate == 1 ? 'Fahrzeug aufgeschlossen' : 'Fahrzeug abgeschlossen', 1)
+    }
     if(lockstate == 1) {
         native.playVehicleDoorCloseSound(veh.scriptID, 0)
     } else {
