@@ -8,8 +8,8 @@ https://github.com/MateqB/altv-vehicle-lock-system
 
 # Was wurde hinzugefügt?
 
-Es wurde auf Deutsch übersetzt
-Es wurde ein Discord Log eingefügt
+-   Es wurde auf Deutsch übersetzt
+-   Es wurde ein Discord Log eingefügt
 
 # Was brauche ich?
 
